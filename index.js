@@ -1,14 +1,19 @@
 const http = require('http');
+const fs = require('fs');
 
-const hostname = 'localhost';
-const port = 8000;
+const port = 3003;
 
 const server = http.createServer((request, response) => {
-  response.statusCode = 200;
-  response.setHeader('Content-Type', 'text/plain');
-  response.end('Hello, World!');
+  fs.readFile('index.html', (error, data) => {
+    if (error) {
+      response.write('Something went wrong');
+    } else {
+      response.statusCode = 200;
+      response.setHeader('Content-Type', 'text/html');
+      response.write(data);
+    }
+    response.end();
+  });
 });
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+server.listen(port);
